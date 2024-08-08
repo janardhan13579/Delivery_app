@@ -2,11 +2,11 @@ const restaurentModel = require('../model/restaurent.model');
 const restaurantSchema = require('../model/restaurent.model');
 const addRestaurent = async (req, res) => {
     const user = req.user._id;
-    const { name, address, cuisine, phoneNumber, rating } = req.body;
+    const { name, address, cuisine, phoneNumber, rating ,image} = req.body;
     try {
         const checkReastaurent = await restaurantSchema.findOne({ name });
         if (checkReastaurent) return res.status(400).json({ message: "Reastaurent Name already exist" });
-        const addRestaurent = await restaurantSchema.create({ name, address, cuisine, phoneNumber, rating, user });
+        const addRestaurent = await restaurantSchema.create({ name, address, cuisine, phoneNumber, rating, user,image });
         if (addRestaurent) return res.status(201).json({ message: "Sucessfully Added" });
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -53,7 +53,7 @@ const updateRestaurent = async (req, res) => {
     try {
         const findRestaurent = await restaurantSchema.findById({ _id: id })
         if (!findRestaurent) return res.status(404).json({ message: 'Cannot find restaurant' });
-        const updates = ['name', 'address', 'cuisine', 'rating', 'phoneNumber'];
+        const updates = ['name', 'address', 'cuisine', 'rating', 'phoneNumber','image'];
         updates.forEach(update => {
             if (req.body[update] != null) {
                 findRestaurent[update] = req.body[update];

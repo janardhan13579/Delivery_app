@@ -23,7 +23,7 @@ const restaurantSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        default: ""
+        default:''
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,

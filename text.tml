@@ -1,0 +1,54 @@
+import express from "express";
+// import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import { MongoClient } from "mongodb";
+
+const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
+const url = "mongodb://localhost:27017"
+const client = new MongoClient(url);
+
+
+async function mongo(callback) {
+    const data = await client.connect();
+    const db = data.db("cars-brandcae");
+    const collection = db.collection("cars");
+    const list = await collection.findOne()
+    callback(list)
+}
+app.post('/item', (req, res) => {
+    const { name, age } = req.body;
+    if (name.length > 0 && age.length > 0) {
+        if (name === "janardhan") {
+            res.send({
+                mes: "Old User"
+            })
+
+        }
+        else {
+            res.send({
+                mes: "New User"
+            })
+        }
+    } else {
+        res.send({
+            me: "unsucess"
+        })
+    }
+})
+app.get('/product', (req, res) => {
+    mongo((record) => {
+        const result = {
+            code: 103,
+            data: [record]
+        }
+        res.send(result)
+
+    })
+
+})
+
+app.listen(5600);
